@@ -5,3 +5,7 @@
 - Add a file called ".env" to your root directory, in the file add this "GEMMA_KEY=" (without the quotes)
 
 - Go to google gemini api and get an api key and put it in to the .env so it will look like "GEMMA_KEY=1234abcd"
+
+
+
+python3 -m streamlit run main.py to run
