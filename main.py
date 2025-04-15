@@ -1,6 +1,7 @@
 from functions.general_helpers import findAllFilePaths, update_local_with_api_doc, extract_github_file, update_git_skeleton_with_api_doc
-from functions.parsers.python_flask import extractAPIFunctions
-from functions.parsers.js_express import extractExpressAPIFunctions
+from parsers.python_flask import extractFlaskAPIFunctions
+from parsers.js_express import extractExpressAPIFunctions
+from parsers.python_fast import extractFastAPIFunctions
 from functions.llm_functions import gemma_send
 from collections import defaultdict
 from dotenv import load_dotenv
@@ -60,8 +61,15 @@ if submit:
   route_names = {}    # dictionary with keys being the file names and the value is a list of the api routes (  {"file.py": ["route1", "route2"]}  )
 
   for file in all_source_code:
-    all_apis[file], route_names[file] = extractAPIFunctions(all_source_code[file])
-    #all_apis[file], route_names[file] = extractExpressAPIFunctions(all_source_code[file])
+    
+    if file.endswith(".py") and "flask" in file:
+      all_apis[file], route_names[file] = extractFlaskAPIFunctions(all_source_code[file])
+
+    elif file.endswith(".py") and "fast" in file:
+      all_apis[file], route_names[file] = extractFastAPIFunctions(all_source_code[file])
+
+    elif file.endswith(".js"):
+      all_apis[file], route_names[file] = extractExpressAPIFunctions(all_source_code[file])
 
 
   st.write(all_apis)  # will print out just the code for all the apis if extractingAPIFunctions() is succesful
