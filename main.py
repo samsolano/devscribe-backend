@@ -1,5 +1,6 @@
 from functions.general_helpers import findAllFilePaths, update_local_with_api_doc, extract_github_file, update_git_skeleton_with_api_doc
 from functions.parsers.python_flask import extractAPIFunctions
+from functions.parsers.js_express import extractExpressAPIFunctions
 from functions.llm_functions import gemma_send
 from collections import defaultdict
 from dotenv import load_dotenv
@@ -16,12 +17,12 @@ import os
 # api_documentation = 
 
 st.set_page_config(layout="wide")
-st.image("/Users/samsolano/Documents/WorkFolder/dev-scribe/devscribe-backend/design_resources/logo-white.svg", width=200)
+st.image("design_resources/logo-white.svg", width=200)
 load_dotenv()
 github_token = os.getenv("GITHUB_TOKEN")
 
 owner = st.text_input("Repository owner", value="tkim516")
-repo = st.text_input("Repository name", value="devscribe-v1")
+repo = st.text_input("Repository name", value="devscribe-example-apis")
 file_path = st.text_input("File path", value=".")
 submit = st.button("Generate")
 
@@ -30,9 +31,11 @@ if submit:
 #---------------------------------------------------------------Find All File Paths----------------------------------------------------------------------------------------------
   
   # Stores the paths of all files in repo of correct file type (as defined in "file_types") into "paths" variable 
+  st.write("1")
   root_directory = extract_github_file(owner, repo, file_path, github_token)
+  st.write("2")
   paths = []
-  file_types = [".py"]
+  file_types = [".js", ".py"]
   current_path = "."
   findAllFilePaths(paths, current_path, root_directory, file_types, owner, repo, github_token)
   st.write(paths)
@@ -58,6 +61,8 @@ if submit:
 
   for file in all_source_code:
     all_apis[file], route_names[file] = extractAPIFunctions(all_source_code[file])
+    #all_apis[file], route_names[file] = extractExpressAPIFunctions(all_source_code[file])
+
 
   st.write(all_apis)  # will print out just the code for all the apis if extractingAPIFunctions() is succesful
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
