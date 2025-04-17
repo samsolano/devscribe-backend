@@ -65,4 +65,5 @@ def extractFlaskAPIFunctions(code):
   # In case the file ends while still inside a function block
   if inside_function and current_function:
       api_functions.append("".join(current_function))
+
   return api_functions, routes
