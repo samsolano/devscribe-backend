@@ -10,7 +10,7 @@ import re
 
 
 # Function for getting all python flask api code into a single list
-def extractAPIFunctions(code):
+def extractFlaskAPIFunctions(code):
   api_functions = []
   routes = []
 
@@ -65,4 +65,5 @@ def extractAPIFunctions(code):
   # In case the file ends while still inside a function block
   if inside_function and current_function:
       api_functions.append("".join(current_function))
+
   return api_functions, routes
